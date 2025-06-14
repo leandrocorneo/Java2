@@ -14,7 +14,7 @@ public class FaseDAO {
     public void insert(Fase fase) throws SQLException {
         String sql = "INSERT INTO tb_fases (curso_id, fase, qtd_disciplinas, qtd_professores) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = ConnectionFactory.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, fase.getCursoId());
@@ -36,7 +36,7 @@ public class FaseDAO {
         String sql = "SELECT * FROM tb_fases WHERE id = ?";
         Fase fase = null;
 
-        try (Connection conn = ConnectionFactory.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
@@ -58,7 +58,7 @@ public class FaseDAO {
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM tb_fases WHERE id = ?";
 
-        try (Connection conn = ConnectionFactory.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);

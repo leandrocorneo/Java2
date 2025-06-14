@@ -3,14 +3,13 @@ package database.dao;
 import database.ConnectionFactory;
 import database.model.Curso;
 import java.sql.*;
-import java.time.LocalDate;
 
 public class CursoDAO {
 
     public void insert(Curso curso) throws SQLException {
         String sql = "INSERT INTO tb_cursos (nome, data_processamento, periodo_inicial, periodo_final, sequencia, versao_layout, arquivo_hash) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = ConnectionFactory.getConnection(); //FALTA PASSAR A MERDA DOS PARAMETROS DO BANCO
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, curso.getNome());
@@ -35,7 +34,7 @@ public class CursoDAO {
         String sql = "SELECT * FROM tb_cursos WHERE id = ?";
         Curso curso = null;
 
-        try (Connection conn = ConnectionFactory.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
@@ -60,7 +59,7 @@ public class CursoDAO {
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM tb_cursos WHERE id = ?";
 
-        try (Connection conn = ConnectionFactory.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);

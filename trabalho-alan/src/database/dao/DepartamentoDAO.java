@@ -11,7 +11,7 @@ public class DepartamentoDAO {
 
     public void insert(Departamento departamento) {
         String sql = "INSERT INTO tb_departamentos (nome) VALUES (?)";
-        try (Connection conn = ConnectionFactory.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, departamento.getNome());
@@ -31,7 +31,7 @@ public class DepartamentoDAO {
 
     public void update(Departamento departamento) {
         String sql = "UPDATE tb_departamentos SET nome = ? WHERE id = ?";
-        try (Connection conn = ConnectionFactory.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, departamento.getNome());
@@ -45,7 +45,7 @@ public class DepartamentoDAO {
 
     public void delete(int id) {
         String sql = "DELETE FROM tb_departamentos WHERE id = ?";
-        try (Connection conn = ConnectionFactory.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -58,7 +58,7 @@ public class DepartamentoDAO {
     public Departamento findById(int id) {
         Departamento departamento = null;
         String sql = "SELECT * FROM tb_departamentos WHERE id = ?";
-        try (Connection conn = ConnectionFactory.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -78,7 +78,7 @@ public class DepartamentoDAO {
     public List<Departamento> findAll() {
         List<Departamento> departamentos = new ArrayList<>();
         String sql = "SELECT * FROM tb_departamentos";
-        try (Connection conn = ConnectionFactory.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
