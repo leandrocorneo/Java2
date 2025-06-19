@@ -3,27 +3,24 @@ package database.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLException;
 
 import database.ConnectionFactory;
-import database.model.Disciplina;
+import database.model.Turma;
 
-public class DisciplinaDAO {
-
-    public void insert(Disciplina disciplina) {
+public class TurmaDAO {
+    public void insert(Turma turma) {
         try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123")) {
-            String sql = "INSERT INTO disciplina (nome) VALUES (?)";
+            String sql = "INSERT INTO turma (id_disciplina, id_professor) VALUES (?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                stmt.setString(1, disciplina.getNome());
-
+                stmt.setInt(1, turma.getDisciplinaId());
+                stmt.setInt(2, turma.getProfessorId());
                 int affectedRows = stmt.executeUpdate();
                 if (affectedRows > 0) {
                     try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                         if (generatedKeys.next()) {
-                            disciplina.setId(generatedKeys.getInt(1));
+                            turma.setId(generatedKeys.getInt(1));
                         }
                     }
                 }
@@ -33,12 +30,13 @@ public class DisciplinaDAO {
         }
     }
 
-    public void update(Disciplina disciplina) {
+    public void update(Turma turma) {
         try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123")) {
-            String sql = "UPDATE disciplina SET nome = ? WHERE id_disciplina = ?";
+            String sql = "UPDATE turma SET id_disciplina = ?, id_professor = ? WHERE id_turma = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, disciplina.getNome());
-                stmt.setInt(2, disciplina.getId());
+                stmt.setInt(1, turma.getDisciplinaId());
+                stmt.setInt(2, turma.getProfessorId());
+                stmt.setInt(3, turma.getId());
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
@@ -48,7 +46,7 @@ public class DisciplinaDAO {
 
     public void delete(int id) {
         try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123")) {
-            String sql = "DELETE FROM disciplina WHERE id_disciplina = ?";
+            String sql = "DELETE FROM turma WHERE id_turma = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, id);
                 stmt.executeUpdate();
@@ -58,41 +56,44 @@ public class DisciplinaDAO {
         }
     }
 
-    public Disciplina findById(int id) {
-        Disciplina disciplina = null;
+    public Turma findById(int id) {
+        Turma turma = null;
         try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123")) {
-            String sql = "SELECT * FROM disciplina WHERE id_disciplina = ?";
+            String sql = "SELECT * FROM turma WHERE id_turma = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, id);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
-                        disciplina = new Disciplina();
-                        disciplina.setId(rs.getInt("id_disciplina"));
-                        disciplina.setNome(rs.getString("nome"));
+                        turma = new Turma();
+                        turma.setId(rs.getInt("id_turma"));
+                        turma.setDisciplinaId(rs.getInt("id_disciplina"));
+                        turma.setProfessorId(rs.getInt("id_professor"));
                     }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return disciplina;
+        return turma;
     }
 
-    public List<Disciplina> findAll() {
-        List<Disciplina> disciplinas = new ArrayList<>();
+    public java.util.List<Turma> findAll() {
+        java.util.List<Turma> turmas = new java.util.ArrayList<>();
         try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123")) {
-            String sql = "SELECT * FROM disciplina";
-            try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            String sql = "SELECT * FROM turma";
+            try (PreparedStatement stmt = conn.prepareStatement(sql);
+                 ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Disciplina disciplina = new Disciplina();
-                    disciplina.setId(rs.getInt("id_disciplina"));
-                    disciplina.setNome(rs.getString("nome"));
-                    disciplinas.add(disciplina);
+                    Turma turma = new Turma();
+                    turma.setId(rs.getInt("id_turma"));
+                    turma.setDisciplinaId(rs.getInt("id_disciplina"));
+                    turma.setProfessorId(rs.getInt("id_professor"));
+                    turmas.add(turma);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return disciplinas;
+        return turmas;
     }
 }

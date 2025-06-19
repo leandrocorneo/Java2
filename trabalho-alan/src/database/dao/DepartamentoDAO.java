@@ -10,17 +10,17 @@ import java.util.List;
 public class DepartamentoDAO {
 
     public void insert(Departamento departamento) {
-        String sql = "INSERT INTO tb_departamentos (nome) VALUES (?)";
-        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123")) {
+            String sql = "INSERT INTO departamento (nome) VALUES (?)";
+            try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setString(1, departamento.getNome());
 
-            stmt.setString(1, departamento.getNome());
-
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet rs = stmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        departamento.setId(rs.getInt(1));
+                int affectedRows = stmt.executeUpdate();
+                if (affectedRows > 0) {
+                    try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            departamento.setId(generatedKeys.getInt(1));
+                        }
                     }
                 }
             }
@@ -30,67 +30,65 @@ public class DepartamentoDAO {
     }
 
     public void update(Departamento departamento) {
-        String sql = "UPDATE tb_departamentos SET nome = ? WHERE id = ?";
-        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, departamento.getNome());
-            stmt.setInt(2, departamento.getId());
-
-            stmt.executeUpdate();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123")) {
+            String sql = "UPDATE departamento SET nome = ? WHERE id_departamento = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, departamento.getNome());
+                stmt.setInt(2, departamento.getId());
+                stmt.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void delete(int id) {
-        String sql = "DELETE FROM tb_departamentos WHERE id = ?";
-        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123")) {
+            String sql = "DELETE FROM departamento WHERE id_departamento = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public List<Departamento> findAll() {
+        List<Departamento> departamentos = new ArrayList<>();
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123")) {
+            String sql = "SELECT * FROM departamento";
+            try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    Departamento departamento = new Departamento();
+                    departamento.setId(rs.getInt("id_departamento"));
+                    departamento.setNome(rs.getString("nome"));
+                    departamentos.add(departamento);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return departamentos;
+    }
+
     public Departamento findById(int id) {
         Departamento departamento = null;
-        String sql = "SELECT * FROM tb_departamentos WHERE id = ?";
-        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    departamento = new Departamento();
-                    departamento.setId(rs.getInt("id"));
-                    departamento.setNome(rs.getString("nome"));
+        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123")) {
+            String sql = "SELECT * FROM departamento WHERE id_departamento = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, id);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        departamento = new Departamento();
+                        departamento.setId(rs.getInt("id_departamento"));
+                        departamento.setNome(rs.getString("nome"));
+                    }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return departamento;
-    }
-
-    public List<Departamento> findAll() {
-        List<Departamento> departamentos = new ArrayList<>();
-        String sql = "SELECT * FROM tb_departamentos";
-        try (Connection conn = ConnectionFactory.getConnection("localhost", "5432", "postgres", "postgres", "123");
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Departamento departamento = new Departamento();
-                departamento.setId(rs.getInt("id"));
-                departamento.setNome(rs.getString("nome"));
-                departamentos.add(departamento);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return departamentos;
     }
 }

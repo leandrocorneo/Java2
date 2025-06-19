@@ -1,0 +1,73 @@
+Objetivo: Esta consulta lista todos os professores, 
+suas titulações e os nomes dos departamentos aos quais pertencem. 
+Além disso, ela conta o número de turmas que cada professor está lecionando.
+É útil para ter uma visão geral da carga de trabalho dos professores por departamento.
+
+SELECT
+    P.nome AS NomeProfessor,
+    P.titulacao AS TitulacaoProfessor,
+    D.nome AS NomeDepartamento,
+    COUNT(T.id_professor) AS TotalTurmasLecionadas
+FROM
+    Professor AS P
+JOIN
+    Departamento AS D ON P.id_departamento = D.id_departamento
+LEFT JOIN
+    Turma AS T ON P.id_professor = T.id_professor
+GROUP BY
+    P.id_professor, P.nome, P.titulacao, D.nome
+ORDER BY
+    D.nome, P.nome;
+ 
+
+
+Objetivo: Esta consulta retorna o nome de cada curso,
+sua duração e o número total de disciplinas associadas
+à sua grade curricular. Também calcula a duração média 
+dos cursos por departamento. Isso pode ser útil para análise curricular e planejamento.
+
+SELECT
+    C.nome AS NomeCurso,
+    C.duracao AS DuracaoCurso,
+    COUNT(DISTINCT GC.id_disciplina) AS NumeroDisciplinasNoCurso,
+    AVG(C.duracao) OVER (PARTITION BY D.nome) AS MediaDuracaoCursosNoDepartamento
+FROM
+    Curso AS C
+JOIN
+    GradeCurricular AS GC ON C.id_curso = GC.id_curso
+JOIN
+    Departamento AS D ON C.id_departamento = D.id_departamento
+GROUP BY
+    C.id_curso, C.nome, C.duracao, D.nome
+ORDER BY
+    D.nome, C.nome;
+
+
+Objetivo: Esta consulta identifica os alunos que
+estão com status "Ativo", o curso em que estão matriculados e,
+para cada um deles, lista as disciplinas em que estão 
+atualmente matriculados (através das turmas).
+É útil para monitorar a situação dos alunos e suas matrículas em turmas específicas.
+
+
+SELECT
+    M.nome AS NomeAluno,
+    M.cpf AS CPFAluno,
+    C.nome AS NomeCurso,
+    STRING_AGG(D.nome, ', ' ORDER BY D.nome) AS DisciplinasMatriculadas
+FROM
+    Matricula AS M
+JOIN
+    Curso AS C ON M.id_curso = C.id_curso
+JOIN
+    MatriculaTurma AS MT ON M.id_matricula = MT.id_matricula
+JOIN
+    Turma AS T ON MT.id_turma = T.id_turma
+JOIN
+    Disciplina AS D ON T.id_disciplina = D.id_disciplina
+WHERE
+    M.status = 'Ativo'
+GROUP BY
+    M.id_matricula, M.nome, M.cpf, C.nome
+ORDER BY
+    C.nome, M.nome;

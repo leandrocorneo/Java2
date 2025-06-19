@@ -2,19 +2,39 @@ package database.model;
 
 public class Professor {
     private int id;
-    private int disciplinaId; 
     private String nome;
-    private int tituloDocente;
+    private String titulacao;
+    private int departamentoId;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    } 
+      
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public int getDisciplinaId() { return disciplinaId; }
-    public void setDisciplinaId(int disciplinaId) { this.disciplinaId = disciplinaId; }
+    public String getNome() {
+        return nome;
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public int getTituloDocente() { return tituloDocente; }
-    public void setTituloDocente(int tituloDocente) { this.tituloDocente = tituloDocente; }
+    public String getTitulacao() {
+        return titulacao;
+    }
+
+    public void setTitulacao(String titulacao) {
+        this.titulacao = titulacao;
+    }
+
+    public int getDepartamentoId() {
+        return departamentoId;
+    }
+
+    public void setDepartamentoId(int departamentoId) {
+        this.departamentoId = departamentoId;
+    }
 }

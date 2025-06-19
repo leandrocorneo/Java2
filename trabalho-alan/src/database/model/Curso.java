@@ -1,38 +1,40 @@
 package database.model;
 
-import java.time.LocalDate;
-
 public class Curso {
     private int id;
     private String nome;
-    private LocalDate dataProcessamento;
-    private String periodoInicial;
-    private String periodoFinal;
-    private int sequencia;
-    private String versaoLayout;
-    private String arquivoHash;
+    private int duracao;
+    private int departamentoId;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public LocalDate getDataProcessamento() { return dataProcessamento; }
-    public void setDataProcessamento(LocalDate dataProcessamento) { this.dataProcessamento = dataProcessamento; }
+    public String getNome() {
+        return nome;
+    }
 
-    public String getPeriodoInicial() { return periodoInicial; }
-    public void setPeriodoInicial(String periodoInicial) { this.periodoInicial = periodoInicial; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public String getPeriodoFinal() { return periodoFinal; }
-    public void setPeriodoFinal(String periodoFinal) { this.periodoFinal = periodoFinal; }
+    public int getDuracao() {
+        return duracao;
+    }
 
-    public int getSequencia() { return sequencia; }
-    public void setSequencia(int sequencia) { this.sequencia = sequencia; }
+    public void setDuracao(int duracao) {
+        this.duracao = duracao;
+    }
 
-    public String getVersaoLayout() { return versaoLayout; }
-    public void setVersaoLayout(String versaoLayout) { this.versaoLayout = versaoLayout; }
+    public int getDepartamentoId() {
+        return departamentoId;
+    }
 
-    public String getArquivoHash() { return arquivoHash; }
-    public void setArquivoHash(String arquivoHash) { this.arquivoHash = arquivoHash; }
+    public void setDepartamentoId(int departamentoId) {
+        this.departamentoId = departamentoId;
+    }
 }
