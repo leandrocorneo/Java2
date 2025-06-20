@@ -12,25 +12,25 @@ public class FindTest {
         GradeCurricularDAO gradeCurricularDAO = new GradeCurricularDAO();
         MatriculaDAO matriculaDAO = new MatriculaDAO();
 
-        Departamento departamento = departamentoDAO.findById(2);
+        Departamento departamento = departamentoDAO.findById(1);
         System.out.println("Departamento: " + departamento.getNome());
 
-        Curso curso = cursoDAO.findById(2);
+        Curso curso = cursoDAO.findById(1);
         System.out.println("Curso: " + curso.getNome());
 
-        Disciplina disciplina = disciplinaDAO.findById(2);
+        Disciplina disciplina = disciplinaDAO.findById(1);
         System.out.println("Disciplina: " + disciplina.getNome());
 
-        Professor professor = professorDAO.findById(2);
+        Professor professor = professorDAO.findById(1);
         System.out.println("Professor: " + professor.getNome());
 
-        Turma turma = turmaDAO.findById(2);
+        Turma turma = turmaDAO.findById(1);
         System.out.println("Turma: ID " + turma.getId());
 
-        GradeCurricular gradeCurricular = gradeCurricularDAO.findById(2);
+        GradeCurricular gradeCurricular = gradeCurricularDAO.findById(1);
         System.out.println("Grade Curricular ID: " + gradeCurricular.getId());
 
-        Matricula matricula = matriculaDAO.findById(2);
+        Matricula matricula = matriculaDAO.findById(1);
         System.out.println("Matrícula: " + matricula.getNome());
 
         System.out.println("\nTodos Departamentos:");

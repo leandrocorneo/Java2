@@ -54,7 +54,7 @@ public class InsertTest {
         Matricula matricula = new Matricula();
         matricula.setNome("Ana Maria");
         matricula.setCpf("12345678900");
-        matricula.setStatus("Ativa");
+        matricula.setStatus("Ativo");
         matricula.setCursoId(curso.getId());
         matriculaDAO.insert(matricula);
         System.out.println("Matrícula inserida: " + matricula.getId());

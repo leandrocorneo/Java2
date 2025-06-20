@@ -18,7 +18,7 @@ public class DeleteTest {
         int gradeId = 1;
         int professorId = 1;
         int disciplinaId = 1;
-        int cursoId = 3;
+        int cursoId = 1;
         int departamentoId = 1;
 
         matriculaDAO.delete(matriculaId);

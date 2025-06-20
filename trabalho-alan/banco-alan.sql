@@ -1,3 +1,12 @@
+DROP TABLE IF EXISTS MatriculaTurma;
+DROP TABLE IF EXISTS GradeCurricular;
+DROP TABLE IF EXISTS Matricula;
+DROP TABLE IF EXISTS Turma;
+DROP TABLE IF EXISTS Curso;
+DROP TABLE IF EXISTS Disciplina;
+DROP TABLE IF EXISTS Professor;
+DROP TABLE IF EXISTS Departamento;
+
 CREATE TABLE Departamento (
     id_departamento SERIAL PRIMARY KEY,
     nome VARCHAR(100)
