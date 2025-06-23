@@ -83,7 +83,7 @@ public class RelatorioConsultas {
             JOIN MatriculaTurma AS MT ON M.id_matricula = MT.id_matricula
             JOIN Turma AS T ON MT.id_turma = T.id_turma
             JOIN Disciplina AS D ON T.id_disciplina = D.id_disciplina
-            WHERE M.status = 'Ativo'
+            WHERE M.status = 'Ativa'
             GROUP BY M.id_matricula, M.nome, M.cpf, C.nome
             ORDER BY C.nome, M.nome
         """;
