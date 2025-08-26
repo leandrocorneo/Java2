@@ -1,8 +1,6 @@
 import database.dao.*;
 import database.model.*;
 
-import java.util.List;
-
 public class InsertTest {
     public static void main(String[] args) {
         DepartamentoDAO departamentoDAO = new DepartamentoDAO();
@@ -14,67 +12,68 @@ public class InsertTest {
         MatriculaDAO matriculaDAO = new MatriculaDAO();
         MatriculaTurmaDAO matriculaTurmaDAO = new MatriculaTurmaDAO();
 
-        Departamento dep = new Departamento();
-        dep.setNome("Engenharia");
-        departamentoDAO.insert(dep);
-        System.out.println("Departamento inserido: " + dep.getId());
-
-        Curso curso = new Curso();
-        curso.setNome("Engenharia Civil");
-        curso.setDuracao(10);
-        curso.setDepartamentoId(dep.getId());
-        cursoDAO.insert(curso);
-        System.out.println("Curso inserido: " + curso.getId());
-
-        Disciplina disciplina = new Disciplina();
-        disciplina.setNome("Mecânica dos Solos");
-        disciplinaDAO.insert(disciplina);
-        System.out.println("Disciplina inserida: " + disciplina.getId());
-
-        Professor prof = new Professor();
-        prof.setNome("Carlos Silva");
-        prof.setTitulacao("Doutor");
-        prof.setDepartamentoId(dep.getId());
-        professorDAO.insert(prof);
-        System.out.println("Professor inserido: " + prof.getId());
-
-        Turma turma = new Turma();
-        turma.setDisciplinaId(disciplina.getId());
-        turma.setProfessorId(prof.getId());
-        turmaDAO.insert(turma);
-        System.out.println("Turma inserida: " + turma.getId());
-
-        GradeCurricular grade = new GradeCurricular();
-        grade.setCursoId(curso.getId());
-        grade.setDisciplinaId(disciplina.getId());
-        grade.setSemestre(1);
-        gradeDAO.insert(grade);
-        System.out.println("Grade curricular inserida: " + grade.getId());
-
-        Matricula matricula = new Matricula();
-        matricula.setNome("Ana Maria");
-        matricula.setCpf("12345678900");
-        matricula.setStatus("Ativo");
-        matricula.setCursoId(curso.getId());
-        matriculaDAO.insert(matricula);
-        System.out.println("Matrícula inserida: " + matricula.getId());
-
-        MatriculaTurma matriculaTurma = new MatriculaTurma();
-        matriculaTurma.setMatriculaId(matricula.getId());
-        matriculaTurma.setTurmaId(turma.getId());
-        matriculaTurmaDAO.insert(matriculaTurma);
-        System.out.println("Matrícula na turma inserida.");
-
-        List<Curso> cursos = cursoDAO.findAll();
-        System.out.println("Cursos cadastrados:");
-        for (Curso c : cursos) {
-            System.out.println(" - " + c.getNome());
+        Departamento[] departamentos = new Departamento[3];
+        for (int i = 0; i < 3; i++) {
+            departamentos[i] = new Departamento();
+            departamentos[i].setNome("Departamento " + (i + 1));
+            departamentoDAO.insert(departamentos[i]);
         }
 
-        List<Professor> professores = professorDAO.findAll();
-        System.out.println("Professores cadastrados:");
-        for (Professor p : professores) {
-            System.out.println(" - " + p.getNome() + ", " + p.getTitulacao());
+        Curso[] cursos = new Curso[3];
+        for (int i = 0; i < 3; i++) {
+            cursos[i] = new Curso();
+            cursos[i].setNome("Curso " + (i + 1));
+            cursos[i].setDuracao(8 + i);
+            cursos[i].setDepartamentoId(departamentos[i % 3].getId());
+            cursoDAO.insert(cursos[i]);
         }
+
+        Disciplina[] disciplinas = new Disciplina[3];
+        for (int i = 0; i < 3; i++) {
+            disciplinas[i] = new Disciplina();
+            disciplinas[i].setNome("Disciplina " + (i + 1));
+            disciplinaDAO.insert(disciplinas[i]);
+        }
+
+        Professor[] professores = new Professor[3];
+        for (int i = 0; i < 3; i++) {
+            professores[i] = new Professor();
+            professores[i].setNome("Professor " + (i + 1));
+            professores[i].setTitulacao("Mestre");
+            professores[i].setDepartamentoId(departamentos[i % 3].getId());
+            professorDAO.insert(professores[i]);
+        }
+
+        Turma[] turmas = new Turma[3];
+        for (int i = 0; i < 3; i++) {
+            turmas[i] = new Turma();
+            turmas[i].setDisciplinaId(disciplinas[i].getId());
+            turmas[i].setProfessorId(professores[i].getId());
+            turmaDAO.insert(turmas[i]);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            GradeCurricular grade = new GradeCurricular();
+            grade.setCursoId(cursos[i].getId());
+            grade.setDisciplinaId(disciplinas[i].getId());
+            grade.setSemestre(i + 1);
+            gradeDAO.insert(grade);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            Matricula matricula = new Matricula();
+            matricula.setNome("Aluno " + (i + 1));
+            matricula.setCpf("0000000000" + i);
+            matricula.setStatus("Ativo");
+            matricula.setCursoId(cursos[i].getId());
+            matriculaDAO.insert(matricula);
+
+            MatriculaTurma matriculaTurma = new MatriculaTurma();
+            matriculaTurma.setMatriculaId(matricula.getId());
+            matriculaTurma.setTurmaId(turmas[i].getId());
+            matriculaTurmaDAO.insert(matriculaTurma);
+        }
+
+        System.out.println("Inserção de 3 registros por DAO concluída.");
     }
 }
