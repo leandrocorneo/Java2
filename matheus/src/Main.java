@@ -196,12 +196,22 @@ public class Main extends JFrame {
     }
 
     private void converterCapitalizar() {
+        converterMinusculo();
         String[] linhas = getLinhas();
         for (int i = 0; i < linhas.length; i++) {
-            if (linhas[i].length() > 0) {
-                String primeira = linhas[i].substring(0, 1).toUpperCase();
-                String resto = linhas[i].substring(1).toLowerCase();
-                linhas[i] = primeira + resto;
+            boolean novaPalavra = true;
+            for (int j = 0; j < linhas[i].length(); j++) {
+                if (linhas[i].charAt(j) == ' ') {
+                    novaPalavra = true;
+                    continue;
+                }
+
+                if (novaPalavra == true) {
+                    char[] c = linhas[i].toCharArray();
+                    c[j] = Character.toUpperCase(c[j]);
+                    linhas[i] = new String(c);
+                    novaPalavra = false;
+                }
             }
         }
         setLinhas(linhas);
